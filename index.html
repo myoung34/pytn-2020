@@ -527,6 +527,21 @@ layout: false
 
 .right-column[
 
+  I want control.
+
+]
+
+---
+
+layout: false
+.left-column[
+  ## Why do this
+]
+
+.right-column[
+
+  I want control.
+
   - The App Sucks
 ]
 
@@ -539,7 +554,10 @@ layout: false
 
 .right-column[
 
+  I want control.
+
   - The App Sucks
+
   - Beta features not complete yet
 ]
 
@@ -563,43 +581,223 @@ layout: false
 
 ---
 
-# (Don't) Take it apart
+layout: false
+.left-column[
+  ## Lets Start Recon
 
 ---
 
-# The Pineapple
+]
+
+.right-column[
+]
 
 ---
 
-# Probe
+layout: false
+.left-column[
+  ## Lets Start Recon
+  ### Take it apart
+]
+
+.right-column[
+  ![](images/keg1.jpg)
+]
 
 ---
 
-# What do we know
+layout: false
+.left-column[
+  ## Lets Start Recon
+  ### Take it apart
+]
+
+.right-column[
+  ![](images/keg2.png)
+]
 
 ---
 
-# Capture
+layout: false
+.left-column[
+  ## Lets Intercept
+  ### The Pineapple
+]
+
+.right-column[
+]
 
 ---
 
-# Whats Next
+layout: false
+.left-column[
+  ## Lets Intercept
+  ### The Pineapple
+  ### PCAP Inspection
+]
+
+.right-column[
+]
+
 
 ---
 
-# Post Mortem
+layout: false
+.left-column[
+  ## Lets Intercept
+  ### The Pineapple
+  ### PCAP Inspection
+  ### DNS Spoof
+]
+
+.right-column[
+]
 
 ---
 
-# Was what I did hacking?
+# Lets Pretend to be a blynk Device
+
+![](images/blynk1.png)
 
 ---
 
-# What could have stopped me
+# Lets Pretend to be a blynk Device
+
+![](images/blynk2.png)
 
 ---
 
-# What is reasonable disclosure
+layout: false
+.left-column[
+  ## What do we know
+  ### Who it wants to talk to and how
+]
+
+.right-column[
+Based on the pcap we know it wants to talk to plaato.blynk.cc on port 80 with no SSL.
+It's sending some sort of auth token and waiting.
+]
+
+---
+
+layout: false
+.left-column[
+  ## What do we know
+  ### Who it wants to talk to and how
+  ### Hardware protocol
+]
+
+.right-column[
+Blynk transfers binary messages between the server and the hardware with the following structure:
+
+| Command       | Message Id    | Length/Status   | Body     |
+|:-------------:|:-------------:|:---------------:|:--------:|
+| 1 byte        | 2 bytes       | 2 bytes         | Variable |
+
+
+  .footnote[.red[*] https://github.com/blynkkk/blynk-server#blynk-protocol]
+]
+
+---
+
+layout: false
+.left-column[
+  ## What do we know
+  ### Who it wants to talk to and how
+  ### Hardware protocol
+  ### Auth Successful Packet
+]
+
+.right-column[
+TESTS ARE AWESOME
+
+```remark
+    def test_authenticate(self, cb, mocker):
+        mocker.patch.object(cb, 'send', return_value=None)
+        mocker.patch.object(cb, 'receive', return_value=b'\x00\x00\x02\x00\xc8')
+        cb._authenticate()
+        assert cb._state == cb.AUTHENTICATED
+```
+
+  .footnote[.red[*] https://github.com/blynkkk/lib-python/blob/master/test/test_blynk_connection.py#L120]
+]
+
+---
+
+layout: false
+.left-column[
+  ## Lets fake a server
+]
+
+.right-column[
+```remark
+
+def parse_response(rsp_data, msg_buffer):
+    msg_args = []
+    msg_head_length = 5
+    msg_type, msg_id, h_data = struct.unpack('!BHH', rsp_data[:msg_head_length])
+    if msg_type in [2, 20, 15, 17, 41]:
+        msg_body = rsp_data[msg_head_length: msg_head_length + h_data]
+        msg_args = [itm.decode('utf-8') for itm in msg_body.split(b'\0')]
+    else:
+        pass
+    return msg_type, msg_id, h_data, msg_args
+
+
+
+socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+socket.bind(('0.0.0.0', 80))
+socket.listen(1)
+conn, addr = socket.accept()
+with conn:
+    while True:
+        try:
+            rsp_data =  conn.recv(1024)
+            data = parse_response(rsp_data, 1024)
+            if data:
+                pprint(data)
+                if data[0] in [2, 29]: # auth?
+                    conn.sendall(b'\x00\x00\x01\x00\xc8') # -> .hex() => '00000100c8'
+        except KeyboardInterrupt:
+            socket.close()
+            sys.exit()
+        except Exception as e:
+            socket.close()
+            raise e
+```
+
+]
+
+---
+
+layout: false
+.left-column[
+  ## Lets fake a server
+  ### Prove it
+]
+
+.right-column[
+]
+
+
+---
+
+## Whats next
+
+---
+
+
+layout: false
+.left-column[
+  ##  Post Mortem
+  ### Was that hacking?
+  ### Prevention
+  ### Reasonable Disclosure
+]
+
+.right-column[
+
+]
 
 ---
 
