@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Title</title>
+    <title>Hacking Homebrew</title>
     <meta charset="utf-8">
     <style>
       @import url(https://fonts.googleapis.com/css?family=Droid+Serif);
@@ -148,7 +148,7 @@ layout: false
 
 ---
 
-![](barcade.jpg)
+![](images/barcade.jpg)
 
 ---
 
@@ -175,7 +175,7 @@ layout: false
 ]
 
 .right-column[
-  ![](https://pbs.twimg.com/card_img/1235217794431582216/_bkMKvGG?format=jpg&name=small)
+  ![](images/candle.jpg)
 ]
 
 ---
@@ -188,21 +188,7 @@ layout: false
 ]
 
 .right-column[
-  ![](https://pbs.twimg.com/media/EPD-WBGXsAAqat9?format=jpg&name=small)
-]
-
----
-
-layout: false
-.left-column[
-  ## What is IoT
-  ### It's Crap
-  ### It's Other Crap
-  ### Sometimes it's useful
-]
-
-.right-column[
-  ![](https://www.postscapes.com/wp-content/uploads/bb-plugin/cache/2FZXQZkA6PhEA8yAE3fYLIWHh1Ki4FhKUj8o_-znq0luGjntpz5FEy8izhSM8Gh-2USsGuo1VfUN7F9iTu4uXmUZ6F05-circle.jpeg)
+  ![](images/teeth.jpg)
 ]
 
 ---
@@ -213,11 +199,26 @@ layout: false
   ### It's Crap
   ### It's Other Crap
   ### Sometimes it's useful
+]
+
+.right-column[
+  ![](images/cat.png)
+]
+
+---
+
+layout: false
+.left-column[
+  ## What is IoT
+  ### It's Crap
+  ### It's Other Crap
+  ### Sometimes it's useful
   ### It's Crap
 ]
 
 .right-column[
-  ![](https://i.imgur.com/RJOI3k0.jpg)
+  ![](images/bidet.jpg)
+  .footnote[.red[*] literally]
 ]
 
 ---
@@ -233,7 +234,7 @@ layout: false
 ]
 
 .right-column[
-  ![](https://image.slidesharecdn.com/devnexus2017-cybercrime-and-the-developer-170225200809/95/devnexus-2017-cybercrime-and-the-developer-how-do-you-make-a-difference-44-638.jpg?cb=1488053311)
+  ![](images/iot.jpg)
 ]
 
 ---
@@ -245,7 +246,7 @@ layout: false
 ]
 
 .right-column[
-  ![](https://media.giphy.com/media/eCqFYAVjjDksg/giphy.gif)
+  ![](images/hacking1.gif)
 ]
 
 ---
@@ -258,9 +259,8 @@ layout: false
 ]
 
 .right-column[
-  ![](https://media.giphy.com/media/xDQ3Oql1BN54c/giphy.gif)
+  ![](images/hacking2.gif)
 ]
-
 
 ---
 
@@ -271,7 +271,7 @@ layout: false
 ]
 
 .right-column[
-  ![](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Hydrometer_in_action.jpg/220px-Hydrometer_in_action.jpg)
+  ![](images/hydro1.jpg)
 ]
 
 ---
@@ -284,7 +284,7 @@ layout: false
 ]
 
 .right-column[
-  ![](https://i.imgur.com/dQ3AqPQ.jpg)
+  ![](images/hydro2.jpg)
 ]
 
 ---
@@ -298,7 +298,7 @@ layout: false
 ]
 
 .right-column[
-  ![](https://i.imgur.com/2XSI3wZ.jpg)
+  ![](images/refract.jpg)
 ]
 
 
@@ -314,8 +314,30 @@ layout: false
 ]
 
 .right-column[
-  ![](https://i.imgur.com/3CjMJyp.jpg)
+  ![](images/tilt.jpg)
 ]
+
+---
+
+layout: false
+.left-column[
+  ## Why do this?
+]
+
+.right-column[
+
+  ![](images/tiltpi.png)
+
+  - The "[official dashboard](https://github.com/baronbrew/TILTpi)" is gross
+
+  - I dont like using different "apps" for different things
+
+  - Everyone has a biased flavor of this.
+
+  - "We" can do better.
+
+]
+
 
 ---
 
@@ -325,7 +347,130 @@ layout: false
 ]
 
 .right-column[
-  ![](https://i.imgur.com/KtBOT5U.png)
+  ![](images/ibeacon.png)
+]
+
+---
+
+layout: false
+.left-column[
+  ## iBeacons
+  ### First pass
+]
+
+.right-column[
+  ![](images/ibeacon.png)
+
+  Let's steal a live packet
+
+  What do we know? We know the mac address. If We can find a packet with that, we can do whatever we want in a vacuum.
+
+  https://raw.githubusercontent.com/myoung34/tilty/pytn/1/blescan.py
+]
+
+---
+
+![](images/pkt1.png)
+
+---
+
+layout: false
+.left-column[
+  ## iBeacons
+  ### First pass
+  ### We have a packet
+]
+
+.right-column[
+  We now have a full packet with all the info we need.
+
+  ```
+    pkt = b'\x04>*\x02\x01\x03\x01w\t\xbc\xd0W\xef\x1e\x02\x01\x04
+            \x1a\xffL\x00\x02\x15\xa4\x95\xbb0\xc5\xb1KD\xb5\x12
+            \x12p\xf0-t\xde\x00B\x03\xf7\xc5\xa7'
+  ```
+
+  Let's use TDD so we can iterate fast and start parsing.
+
+  https://raw.githubusercontent.com/myoung34/tilty/pytn/2/blescan.py
+  https://raw.githubusercontent.com/myoung34/tilty/pytn/2/test_ble.py
+]
+
+---
+
+layout: false
+.left-column[
+  ## iBeacons
+  ### First pass
+  ### We have a packet
+  ### We have a known list of UUID
+]
+
+.right-column[
+  We happen to have a list of known UUID's from the company
+
+  https://github.com/atlefren/pytilt/blob/master/pytilt.py
+
+  TILT_DEVICES = {
+
+      'a495bb30c5b14b44b5121370f02d74de': 'Black',
+
+      'a495bb60c5b14b44b5121370f02d74de': 'Blue',
+
+      'a495bb20c5b14b44b5121370f02d74de': 'Green',
+      
+      ...snip...
+
+  }
+
+
+  Lets pull only from that whitelist.
+
+  https://raw.githubusercontent.com/myoung34/tilty/pytn/3/blescan.py
+  https://raw.githubusercontent.com/myoung34/tilty/pytn/3/test_ble.py
+]
+
+---
+
+layout: false
+.left-column[
+  ## iBeacons
+  ### First pass
+  ### We have a packet
+  ### We have a known list of UUID
+  ### All the data
+]
+
+.right-column[
+  All thats left now is to get the temp and the gravity from major/minor
+
+  https://raw.githubusercontent.com/myoung34/tilty/pytn/4/blescan.py
+  https://raw.githubusercontent.com/myoung34/tilty/pytn/4/test_ble.py
+]
+
+---
+
+layout: false
+.left-column[
+  ## iBeacons
+  ### First pass
+  ### We have a packet
+  ### We have a known list of UUID
+  ### All the data
+  ### Whats next
+]
+
+.right-column[
+
+  ![](images/datadog.png)
+
+
+  https://github.com/myoung34/tilty
+
+  https://pypi.org/project/Tilty/
+
+  https://hub.docker.com/r/myoung34/tilty
+
 ]
 
 ---
