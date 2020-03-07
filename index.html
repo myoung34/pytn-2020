@@ -476,12 +476,55 @@ layout: false
 .right-column[
   ![](images/ibeacon.png)
 ]
+---
+
+layout: false
+.left-column[
+  ## iBeacons
+  ### Helpful Info
+]
+
+.right-column[
+Example tilt hydrometer sensor data message from hcidump -R:
+
+  ```remark
+> 04 3E 27 02 01 00 00 5A 09 9B 16 A3 04 1B 1A FF 4C 00 02 15 
+  A4 95 BB 10 C5 B1 4B 44 B5 12 13 70 F0 2D 74 DE 00 44 03 F8 
+  C5 C7
+
+  ```
+
+  ```remark
+04: HCI Packet Type HCI Event
+3E: LE Meta event
+27: Parameter total length (39 octets)
+02: LE Advertising report sub-event
+01: Number of reports (1)
+00: Event type connectable and scannable undirected advertising
+00: Public address type
+5A 09 9B 16 A3 04: address
+1B: length of data field (27 octets)
+1A: length of first advertising data (AD) structure (26)
+FF: type of first AD structure - manufacturer specific data
+4C 00: manufacturer ID - Apple iBeacon
+02: type (constant, defined by iBeacon spec)
+15: length (constant, defined by iBeacon spec)
+A4 95 BB 10 C5 B1 4B 44 B5 12 13 70 F0 2D 74 DE: device UUID
+00 44: major - temperature (in degrees fahrenheit)
+03 F8: minor - specific gravity (x1000)
+C5: TX power in dBm
+C7: RSSI in dBm
+  ```
+
+  .footnote[.red[*] https://kvurd.com/blog/tilt-hydrometer-ibeacon-data-format/]
+]
 
 ---
 
 layout: false
 .left-column[
   ## iBeacons
+  ### Helpful Info
   ### First pass
 ]
 
@@ -504,6 +547,7 @@ layout: false
 layout: false
 .left-column[
   ## iBeacons
+  ### Helpful Info
   ### First pass
   ### We have a packet
 ]
@@ -528,6 +572,7 @@ layout: false
 layout: false
 .left-column[
   ## iBeacons
+  ### Helpful Info
   ### First pass
   ### We have a packet
   ### We have a known list of UUID
@@ -562,6 +607,7 @@ layout: false
 layout: false
 .left-column[
   ## iBeacons
+  ### Helpful Info
   ### First pass
   ### We have a packet
   ### We have a known list of UUID
@@ -580,6 +626,7 @@ layout: false
 layout: false
 .left-column[
   ## iBeacons
+  ### Helpful Info
   ### First pass
   ### We have a packet
   ### We have a known list of UUID
